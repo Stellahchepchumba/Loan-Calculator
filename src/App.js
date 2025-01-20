@@ -26,7 +26,7 @@ function App() {
       const response = await axios.post(
         `${API_BASE_URL}/api/loans/calculate`,
         loanDetails,
-        { params: { frequency }, withCredentials: true  }
+        { params: { frequency } }
        
       );
       const scheduleData = response.data.amortizationSchedule;
