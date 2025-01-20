@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import LoanForm from "./components/LoanForm";
 import axios from "axios";
 
-const API_BASE_URL = "https://loan-calculator-backend-8q48.onrender.com";
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
 
 
 function App() {
