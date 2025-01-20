@@ -29,21 +29,23 @@ function App() {
         `${API_BASE_URL}/api/loans/calculate`,
         loanDetails,
         { params: { frequency } }
-       
       );
+      console.log("API Response:", response.data);
+  
       const scheduleData = response.data.amortizationSchedule;
-      const headers = scheduleData[0].split(",");
-      const rows = scheduleData.slice(1).map((row) => row.split(","));
+      const headers = scheduleData?.[0]?.split(",") || [];
+      const rows = scheduleData?.slice(1).map((row) => row.split(",")) || [];
+  
       setPayment(response.data.monthlyPayment || 0);
       setSchedule({ headers, rows });
     } catch (error) {
-      console.error("Error calculating loan:", error);
+      console.error("Error calculating loan:", error.response || error.message || error);
       alert("Failed to calculate the loan. Please check your input.");
     } finally {
       setLoading(false);
     }
   };
-
+  
   const handleExport = async (loanDetails, frequency) => {
     try {
       const response = await axios.post(
