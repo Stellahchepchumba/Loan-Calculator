@@ -26,25 +26,30 @@ function App() {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/api/loans/calculate`,
-        loanDetails,
-        { params: { frequency } }
+        `${API_BASE_URL}/api/loans/calculate?frequency=${frequency}`,
+        loanDetails
       );
       console.log("API Response:", response.data);
   
-      const scheduleData = response.data.amortizationSchedule;
-      const headers = scheduleData?.[0]?.split(",") || [];
-      const rows = scheduleData?.slice(1).map((row) => row.split(",")) || [];
+      const { amortizationSchedule = [], monthlyPayment = 0 } = response.data;
   
-      setPayment(response.data.monthlyPayment || 0);
-      setSchedule({ headers, rows });
+      if (amortizationSchedule.length > 0) {
+        const headers = amortizationSchedule[0]?.split(",") || [];
+        const rows = amortizationSchedule.slice(1).map((row) => row.split(","));
+        setSchedule({ headers, rows });
+      } else {
+        setSchedule({ headers: [], rows: [] }); 
+      }
+  
+      setPayment(monthlyPayment);
     } catch (error) {
-      console.error("Error calculating loan:", error.response || error.message || error);
+      console.error("Error calculating loan:", error.response?.data || error.message || error);
       alert("Failed to calculate the loan. Please check your input.");
     } finally {
       setLoading(false);
     }
   };
+  
   
   const handleExport = async (loanDetails, frequency) => {
     try {
