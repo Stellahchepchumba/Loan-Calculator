@@ -140,7 +140,7 @@ function App() {
       {schedule.rows && schedule.rows.length > 0 ? (
         <div>
           <h3>Amortization Schedule</h3>
-          <h5>Payment Amount: KES {payment.toFixed(2)}</h5>
+          <h5>Payment Amount per month: KES {payment.toFixed(2)}</h5>
           <table className="table table-striped">
             <thead>
               <tr>
