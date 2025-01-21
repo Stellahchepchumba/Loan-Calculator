@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import LoanForm from "./components/LoanForm";
 import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
-
-
+const API_BASE_URL = "https://53e7-41-90-66-1.ngrok-free.app";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); 
@@ -21,13 +19,17 @@ function App() {
       alert("Invalid credentials. Please try again.");
     }
   };
-
   const handleCalculate = async (loanDetails, frequency) => {
     setLoading(true);
     try {
       const response = await axios.post(
         `${API_BASE_URL}/api/loans/calculate?frequency=${frequency}`,
-        loanDetails
+        loanDetails,
+        {
+          headers: {
+            "Content-Type": "application/json", 
+          },
+        }
       );
       console.log("API Response:", response.data);
   
@@ -38,7 +40,7 @@ function App() {
         const rows = amortizationSchedule.slice(1).map((row) => row.split(","));
         setSchedule({ headers, rows });
       } else {
-        setSchedule({ headers: [], rows: [] }); 
+        setSchedule({ headers: [], rows: [] });
       }
   
       setPayment(monthlyPayment);
